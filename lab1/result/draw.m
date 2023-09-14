@@ -107,7 +107,7 @@ MISS_Y=5;
 SPEEDUP_Y=6;
 EXE_Y=7;
 
-figure(1)
+figure
 plot(Ascending_sort_Q(:,cachesize),1-Ascending_sort_Q(:,MISS_Y))
 hold on
 grid on
@@ -121,7 +121,7 @@ t.String=["with fixed Bsize: 128-byte and Associativity : 4";" "]
 xlabel("Cache\_size (KB)")
 ylabel("HIT\_rate")
 
-%% y: HIT_rate ; x: bsize with fixed cache_size and fixed nset
+%% y: HIT_rate ; x: bsize with fixed cache_size=8KB and fixed nset=32
 %%% control parameters
 clc
 clear FIXED_cachesize FIXED_nset FIXED_bsize FIXED_associativity
@@ -158,7 +158,7 @@ MISS_Y=5;
 SPEEDUP_Y=6;
 EXE_Y=7;
 
-figure(2)
+figure
 hold on
 yyaxis left
 plot(Ascending_sort_Q(:,bsize),1-Ascending_sort_Q(:,MISS_Y))
@@ -176,7 +176,65 @@ T.FontSize=10;
 t.FontSize=9;
 t.FontAngle="italic";
 T.String=[" ";" HIT\_rate - Block\_size Curve of qsort "]
-t.String=["with fixed Nset: 32 and Cache\_size: 8 KB";" "]
+t.String=["with fixed Nset = 32 and Cache\_size = 8 KB";" "]
+xlabel("Block\_size (bytes)")
+
+%% y: HIT_rate ; x: bsize with fixed cache_size=8KB and fixed nset=16
+%%% control parameters
+clc
+clear FIXED_cachesize FIXED_nset FIXED_bsize FIXED_associativity
+clear cachesize nset bsize associativity Q_fixed_parameter
+clear MISS_Y SPEEDUP_Y EXE_Y
+cachesize=1;
+nset=2;
+bsize=3;
+associativity=4;
+Q_fixed_parameter=Q;
+
+% % % --------------------------------------------------
+FIXED_cachesize = 8;   % 1 2 4 8 16 32 64 128 256 KB
+Q_row=find(Q_fixed_parameter(:,cachesize)==FIXED_cachesize);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_nset = 16;   % 1 2  4  8  16 32
+Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+% FIXED_bsize = 64;  % 16 32  64  128 256
+% Q_row=find(Q_fixed_parameter(:,bsize)==FIXED_bsize);
+% Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+% FIXED_associativity = 16;   % 1  2   4   8   16  32
+% Q_row=find(Q_fixed_parameter(:,associativity)==FIXED_associativity);
+% Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+% % % ----------------------------------------------------
+
+%%% Ascending_sort_Q
+Ascending_sort_Q=sortrows(Q_fixed_parameter,[1 2 3 4]);
+%%%draw
+MISS_Y=5;
+SPEEDUP_Y=6;
+EXE_Y=7;
+
+figure
+hold on
+yyaxis left
+plot(Ascending_sort_Q(:,bsize),1-Ascending_sort_Q(:,MISS_Y))
+scatter(Ascending_sort_Q(:,bsize),1-Ascending_sort_Q(:,MISS_Y),"filled")
+ylabel("HIT\_rate")
+
+yyaxis right
+plot(Ascending_sort_Q(:,bsize),Ascending_sort_Q(:,EXE_Y))
+scatter(Ascending_sort_Q(:,bsize),Ascending_sort_Q(:,EXE_Y),"filled")
+ylabel("Execution time (cycles)")
+
+grid on
+[T,t]=title("","")
+T.FontSize=10;
+t.FontSize=9;
+t.FontAngle="italic";
+T.String=[" ";" HIT\_rate - Block\_size Curve of qsort "]
+t.String=["with fixed Nset = 16 and Cache\_size = 8 KB";" "]
 xlabel("Block\_size (bytes)")
 
 
@@ -194,11 +252,52 @@ associativity=4;
 Q_fixed_parameter=Q;
 
 % % % --------------------------------------------------
-FIXED_cachesize = 4;   % 1 2 4 8 16 32 64 128 256 KB
+FIXED_cachesize = 8;   % 1 2 4 8 16 32 64 128 256 KB
 Q_row=find(Q_fixed_parameter(:,cachesize)==FIXED_cachesize);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
 FIXED_nset = 1;   % 1 2  4  8  16 32
+Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_bsize = 256;  % 16 32  64  128 256
+Q_row=find(Q_fixed_parameter(:,bsize)==FIXED_bsize);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_associativity = 32;   % 1 2   4   8   16  32
+Q_row=find(Q_fixed_parameter(:,associativity)==FIXED_associativity);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+% % % ----------------------------------------------------
+
+%%% Ascending_sort_Q
+Ascending_sort_Q=sortrows(Q_fixed_parameter,[1 2 3 4]);
+%%%draw
+MISS_Y=5;
+SPEEDUP_Y=6;
+EXE_Y=7;
+
+yy(1,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(1,:)=Ascending_sort_Q(1,EXE_Y);
+
+
+%% y: HIT_rate ; x: 16-way asso
+%%% control parameters
+clc
+clear FIXED_cachesize FIXED_nset FIXED_bsize FIXED_associativity
+clear cachesize nset bsize associativity Q_fixed_parameter
+clear MISS_Y SPEEDUP_Y EXE_Y
+cachesize=1;
+nset=2;
+bsize=3;
+associativity=4;
+Q_fixed_parameter=Q;
+
+% % % --------------------------------------------------
+FIXED_cachesize = 8;   % 1 2 4 8 16 32 64 128 256 KB
+Q_row=find(Q_fixed_parameter(:,cachesize)==FIXED_cachesize);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_nset = 2;   % 1 2  4  8  16 32
 Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
@@ -218,10 +317,10 @@ MISS_Y=5;
 SPEEDUP_Y=6;
 EXE_Y=7;
 
-yy(1,:)=1-Ascending_sort_Q(1,MISS_Y);
-yyy(1,:)=Ascending_sort_Q(1,EXE_Y);
+yy(2,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(2,:)=Ascending_sort_Q(1,EXE_Y);
 
-%% y: HIT_rate ; x: directly-map
+%% y: HIT_rate ; x: 8-way asso
 %%% control parameters
 clc
 clear FIXED_cachesize FIXED_nset FIXED_bsize FIXED_associativity
@@ -234,11 +333,11 @@ associativity=4;
 Q_fixed_parameter=Q;
 
 % % % --------------------------------------------------
-FIXED_cachesize = 4;   % 1 2 4 8 16 32 64 128 256 KB
+FIXED_cachesize = 8;   % 1 2 4 8 16 32 64 128 256 KB
 Q_row=find(Q_fixed_parameter(:,cachesize)==FIXED_cachesize);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
-FIXED_nset = 16;   % 1 2  4  8  16 32
+FIXED_nset = 4;   % 1 2  4  8  16 32
 Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
@@ -246,7 +345,7 @@ FIXED_bsize = 256;  % 16 32  64  128 256
 Q_row=find(Q_fixed_parameter(:,bsize)==FIXED_bsize);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
-FIXED_associativity = 1;   % 1 2   4   8   16  32
+FIXED_associativity = 8;   % 1 2   4   8   16  32
 Q_row=find(Q_fixed_parameter(:,associativity)==FIXED_associativity);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 % % % ----------------------------------------------------
@@ -258,9 +357,10 @@ MISS_Y=5;
 SPEEDUP_Y=6;
 EXE_Y=7;
 
-yy(2,:)=1-Ascending_sort_Q(1,MISS_Y);
-yyy(2,:)=Ascending_sort_Q(1,EXE_Y);
-%% y: HIT_rate ; x: N-way asso
+yy(3,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(3,:)=Ascending_sort_Q(1,EXE_Y);
+
+%% y: HIT_rate ; x: 4-way asso
 %%% control parameters
 clc
 clear FIXED_cachesize FIXED_nset FIXED_bsize FIXED_associativity
@@ -273,11 +373,11 @@ associativity=4;
 Q_fixed_parameter=Q;
 
 % % % --------------------------------------------------
-FIXED_cachesize = 4;   % 1 2 4 8 16 32 64 128 256 KB
+FIXED_cachesize = 8;   % 1 2 4 8 16 32 64 128 256 KB
 Q_row=find(Q_fixed_parameter(:,cachesize)==FIXED_cachesize);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
-FIXED_nset = 4;   % 1 2  4  8  16 32
+FIXED_nset = 8;   % 1 2  4  8  16 32
 Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
@@ -297,32 +397,137 @@ MISS_Y=5;
 SPEEDUP_Y=6;
 EXE_Y=7;
 
-yy(3,:)=1-Ascending_sort_Q(1,MISS_Y);
-yyy(3,:)=Ascending_sort_Q(1,EXE_Y);
+yy(4,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(4,:)=Ascending_sort_Q(1,EXE_Y);
 
-%% draw: fully-2way-directly
-figure(3)
+%% y: HIT_rate ; x: 2-way asso
+%%% control parameters
+clc
+clear FIXED_cachesize FIXED_nset FIXED_bsize FIXED_associativity
+clear cachesize nset bsize associativity Q_fixed_parameter
+clear MISS_Y SPEEDUP_Y EXE_Y
+cachesize=1;
+nset=2;
+bsize=3;
+associativity=4;
+Q_fixed_parameter=Q;
+
+% % % --------------------------------------------------
+FIXED_cachesize = 8;   % 1 2 4 8 16 32 64 128 256 KB
+Q_row=find(Q_fixed_parameter(:,cachesize)==FIXED_cachesize);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_nset = 16;   % 1 2  4  8  16 32
+Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_bsize = 256;  % 16 32  64  128 256
+Q_row=find(Q_fixed_parameter(:,bsize)==FIXED_bsize);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_associativity = 2;   % 1 2   4   8   16  32
+Q_row=find(Q_fixed_parameter(:,associativity)==FIXED_associativity);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+% % % ----------------------------------------------------
+
+%%% Ascending_sort_Q
+Ascending_sort_Q=sortrows(Q_fixed_parameter,[1 2 3 4]);
+%%%draw
+MISS_Y=5;
+SPEEDUP_Y=6;
+EXE_Y=7;
+
+yy(5,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(5,:)=Ascending_sort_Q(1,EXE_Y);
+%% y: HIT_rate ; x: directly-map
+%%% control parameters
+clc
+clear FIXED_cachesize FIXED_nset FIXED_bsize FIXED_associativity
+clear cachesize nset bsize associativity Q_fixed_parameter
+clear MISS_Y SPEEDUP_Y EXE_Y
+cachesize=1;
+nset=2;
+bsize=3;
+associativity=4;
+Q_fixed_parameter=Q;
+
+% % % --------------------------------------------------
+FIXED_cachesize = 8;   % 1 2 4 8 16 32 64 128 256 KB
+Q_row=find(Q_fixed_parameter(:,cachesize)==FIXED_cachesize);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_nset = 32;   % 1 2  4  8  16 32
+Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_bsize = 256;  % 16 32  64  128 256
+Q_row=find(Q_fixed_parameter(:,bsize)==FIXED_bsize);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+
+FIXED_associativity = 1;   % 1 2   4   8   16  32
+Q_row=find(Q_fixed_parameter(:,associativity)==FIXED_associativity);
+Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
+% % % ----------------------------------------------------
+
+%%% Ascending_sort_Q
+Ascending_sort_Q=sortrows(Q_fixed_parameter,[1 2 3 4]);
+%%%draw
+MISS_Y=5;
+SPEEDUP_Y=6;
+EXE_Y=7;
+
+yy(6,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(6,:)=Ascending_sort_Q(1,EXE_Y);
+
+%% draw: fully-16-8-4-2way-directly
+how_many_plots_you_want = 4
+
+
+figure
+hold on
+grid on
 yyaxis left
-scatter([0.5,1.5,2.5],yy,"filled")
+plot([1:how_many_plots_you_want],yy(1:how_many_plots_you_want));
+scatter([1:how_many_plots_you_want],yy(1:how_many_plots_you_want),"filled")
 ylabel("HIT\_rate")
 
 yyaxis right
-scatter([0.5,1.5,2.5],yyy,"filled")
+plot([1:how_many_plots_you_want],yyy(1:how_many_plots_you_want));
+scatter([1:how_many_plots_you_want],yyy(1:how_many_plots_you_want),"filled")
 ylabel("Execution time (cycles)")
+set(gca, 'xTick', [1:how_many_plots_you_want]);
+set(gca,'XTickLabel',{'fully','16way','8way','4way',...
+    '2way','directly'})
 
-hold on
 [T,t]=title("","")
 T.FontSize=10;
 t.FontSize=9;
 t.FontAngle="italic";
-T.String=[" ";" HIT\_rate - Cache\_size Curve of qsort "]
-t.String=["with fixed Bsize: 128-byte and Associativity : 4";" "]
-xlabel("Cache\_size (KB)")
-ylabel("HIT\_rate")
+T.String=["";"Different ways of cache mapping"]
+t.String=["with fixed Bsize = 256 bytes and Cache\_size = 8 KB";" "]
+xlabel("")
 
 
+%where is the max hit rate and min exe
+clc
+MISS_Y=5;
+SPEEDUP_Y=6;
+EXE_Y=7;
+[vv,bb]=find(Q==min(Q(:,MISS_Y)));
+max_hit_cachesize = Q(vv,1);
+max_hit_nset = Q(vv,2);
+max_hit_asso = Q(vv,4);
+max_hit_value = 1-Q(vv,MISS_Y);
 
+[vvv,bbb]=find(Q==min(Q(:,EXE_Y)));
+min_exe_cachesize = Q(vvv,1);
+min_exe_nset = Q(vvv,2);
+min_exe_asso = Q(vvv,4);
+min_exe_value = Q(vvv,EXE_Y);
 
-%% where is the minimum
-% [x,y]=find(Q==min(Q(:,7)))
-% Q(x,:)
+if (how_many_plots_you_want==6)
+    yyaxis left
+    plot(1:how_many_plots_you_want,max_hit_value.*ones(1,how_many_plots_you_want),'--','LineWidth',2)
+    yyaxis right
+    plot(1:how_many_plots_you_want,min_exe_value.*ones(1,how_many_plots_you_want),'-','LineWidth',2)
+end
