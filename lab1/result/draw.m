@@ -91,11 +91,11 @@ Q_fixed_parameter=Q;
 % Q_row=find(Q_fixed_parameter(:,nset)==FIXED_nset);
 % Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
-FIXED_bsize = 64;  % 16 32  64  128 256
+FIXED_bsize = 128;  % 16 32  64  128 256
 Q_row=find(Q_fixed_parameter(:,bsize)==FIXED_bsize);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 
-FIXED_associativity = 2;   % 1 2   4   8   16  32
+FIXED_associativity = 4;   % 1 2   4   8   16  32
 Q_row=find(Q_fixed_parameter(:,associativity)==FIXED_associativity);
 Q_fixed_parameter=Q_fixed_parameter(Q_row,:);
 % % % ----------------------------------------------------
@@ -107,8 +107,19 @@ MISS_Y=5;
 SPEEDUP_Y=6;
 EXE_Y=7;
 
+figure(1)
 plot(Ascending_sort_Q(:,cachesize),1-Ascending_sort_Q(:,MISS_Y))
-
+hold on
+grid on
+scatter(Ascending_sort_Q(:,cachesize),1-Ascending_sort_Q(:,MISS_Y),"filled")
+[T,t]=title("","")
+T.FontSize=10;
+t.FontSize=9;
+t.FontAngle="italic";
+T.String=[" ";" HIT\_rate - Cache\_size Curve of qsort "]
+t.String=["with fixed Bsize: 128-byte and Associativity : 4";" "]
+xlabel("Cache\_size (KB)")
+ylabel("HIT\_rate")
 
 %% y: HIT_rate ; x: bsize with fixed cache_size and fixed nset
 %%% control parameters
@@ -147,7 +158,27 @@ MISS_Y=5;
 SPEEDUP_Y=6;
 EXE_Y=7;
 
+figure(2)
+hold on
+yyaxis left
 plot(Ascending_sort_Q(:,bsize),1-Ascending_sort_Q(:,MISS_Y))
+scatter(Ascending_sort_Q(:,bsize),1-Ascending_sort_Q(:,MISS_Y),"filled")
+ylabel("HIT\_rate")
+
+yyaxis right
+plot(Ascending_sort_Q(:,bsize),Ascending_sort_Q(:,EXE_Y))
+scatter(Ascending_sort_Q(:,bsize),Ascending_sort_Q(:,EXE_Y),"filled")
+ylabel("Execution time (cycles)")
+
+grid on
+[T,t]=title("","")
+T.FontSize=10;
+t.FontSize=9;
+t.FontAngle="italic";
+T.String=[" ";" HIT\_rate - Block\_size Curve of qsort "]
+t.String=["with fixed Nset: 32 and Cache\_size: 8 KB";" "]
+xlabel("Block\_size (bytes)")
+
 
 %% y: HIT_rate ; x: fully-asso-map
 %%% control parameters
@@ -188,6 +219,7 @@ SPEEDUP_Y=6;
 EXE_Y=7;
 
 yy(1,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(1,:)=Ascending_sort_Q(1,EXE_Y);
 
 %% y: HIT_rate ; x: directly-map
 %%% control parameters
@@ -227,7 +259,7 @@ SPEEDUP_Y=6;
 EXE_Y=7;
 
 yy(2,:)=1-Ascending_sort_Q(1,MISS_Y);
-
+yyy(2,:)=Ascending_sort_Q(1,EXE_Y);
 %% y: HIT_rate ; x: N-way asso
 %%% control parameters
 clc
@@ -266,6 +298,28 @@ SPEEDUP_Y=6;
 EXE_Y=7;
 
 yy(3,:)=1-Ascending_sort_Q(1,MISS_Y);
+yyy(3,:)=Ascending_sort_Q(1,EXE_Y);
+
+%% draw: fully-2way-directly
+figure(3)
+yyaxis left
+scatter([0.5,1.5,2.5],yy,"filled")
+ylabel("HIT\_rate")
+
+yyaxis right
+scatter([0.5,1.5,2.5],yyy,"filled")
+ylabel("Execution time (cycles)")
+
+hold on
+[T,t]=title("","")
+T.FontSize=10;
+t.FontSize=9;
+t.FontAngle="italic";
+T.String=[" ";" HIT\_rate - Cache\_size Curve of qsort "]
+t.String=["with fixed Bsize: 128-byte and Associativity : 4";" "]
+xlabel("Cache\_size (KB)")
+ylabel("HIT\_rate")
+
 
 
 
